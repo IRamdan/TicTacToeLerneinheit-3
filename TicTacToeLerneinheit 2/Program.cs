@@ -1,4 +1,5 @@
-﻿using TicTacToeLerneinheit_2.Models;
+﻿using TicTacToeLerneinheit_2.Datenbank;
+using TicTacToeLerneinheit_2.Models;
 
 namespace TicTacToeLerneinheit_2
 {
@@ -9,21 +10,26 @@ namespace TicTacToeLerneinheit_2
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Game CurrentGame = new();
             Match CurrentMatch;
-            CurrentGame.InitGame();
-            CurrentGame.InitPlayer();
-            /*CurrentMatch = CurrentGame.CreateMatch()*/
-
+            CurrentGame.MainMenu();
+            CurrentMatch = CurrentGame.CreateMatch();
+            Database.CreateGameTableEntry(CurrentGame.GameSelection, CurrentMatch.GameFieldRows, CurrentMatch.GameFieldCols, CurrentMatch.WinCondition);
+            
             do
             {
-                CurrentMatch = CurrentGame.CreateMatch();
-
+                //Ident direkt ohne getlastID Methode
+                Database.CreateMatchTableEntry(Database.GetLastID("Game"));
+                Database.AddPlayerToPlayerMatch(CurrentGame.Players);
                 CurrentMatch.GetStartingPlayer();
                 do
                 {
                     CurrentMatch.DrawBoard();
                     CurrentMatch.CurrentPlayerDeterminer();
                     CurrentMatch.GetInput();
-                } while (CurrentMatch.CheckGameState() == GameState.IsRunning);
+                    CurrentMatch.GameStatus = CurrentMatch.CheckGameState();
+                    Database.SaveMove(CurrentMatch.CurrentPlayer, CurrentMatch.CalculatedRow, CurrentMatch.CalculatedCol);
+                } while (CurrentMatch.GameStatus == GameState.IsRunning);
+                Database.SaveMatch(CurrentMatch.Winner, CurrentMatch.GameStatus);
+                CurrentMatch = CurrentGame.CreateMatch();
             }
             while (Game.Replay());
             Game.ShowStatistics(CurrentGame.History, CurrentGame.Players);

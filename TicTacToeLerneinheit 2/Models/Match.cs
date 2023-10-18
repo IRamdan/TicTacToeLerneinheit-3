@@ -2,37 +2,13 @@
 namespace TicTacToeLerneinheit_2.Models
 {
     internal class Match
-    #region Animation Vars
     {
-        string[] DrawDanceFrame1 = new string[] {
-        @" \o/    \o/ ",
-        @"  |      |  ",
-        @" / \    / \ "
-    };
-
-        string[] DrawDanceFrame2 = new string[] {
-        @"  o     o  ",
-        @" /|\   /|\ ",
-        @" / \   / \ "
-    };
-
-        string[] DrawDanceFrame3 = new string[] {
-        @"  \o  o/  ",
-        @"  |\  /| ",
-        @" / \  / \ "
-    };
-
-        string[] DrawDanceFrame4 = new string[] {
-        @"  o/   \o  ",
-        @"  |\   /| ",
-        @" / \   / \ "
-    };
-        #endregion
         #region Vars
         internal List<Player> Players { get; set; }
         internal Player CurrentPlayer { get; set; }
         internal Player Winner { get; set; }
         internal string[,] GameField { get; set; }
+        internal GameState GameStatus { get; set; }    
         internal int WinCondition { get; set; }
         internal int GameWinCondition;
         internal int PlayerInputToInt;
@@ -151,14 +127,12 @@ namespace TicTacToeLerneinheit_2.Models
             if (CheckForWin())
             {
                 Winner = CurrentPlayer;
-                WinDanceAnimation();
                 Console.WriteLine($"{CurrentPlayer.Name} hat gewonnen");
                 return GameState.HasWinner;
             }
 
             if (RoundCounter == GameLength - 1)
             {
-                DrawDanceAnimation();
                 Console.WriteLine("Oh nein!\n\nDas Spiel endet unentschieden.\n");
                 return GameState.IsDraw;
             }
@@ -296,8 +270,6 @@ namespace TicTacToeLerneinheit_2.Models
             return false;
         }
         #endregion
-
-        #region Animations
         internal virtual void DrawBoard()
         {
             for (int RowIndex = 0; RowIndex < GameField.GetLength(0); RowIndex++)
@@ -321,57 +293,6 @@ namespace TicTacToeLerneinheit_2.Models
             Console.WriteLine(new string('-', GameField.GetLength(1) * 6));
             Console.ForegroundColor = ConsoleColor.White;
         }
-        internal virtual void DancingPlayer()
-        {
 
-        }
-        internal void DrawDanceAnimation()
-        {
-            List<string[]> Frames = new List<string[]> { DrawDanceFrame1, DrawDanceFrame2, DrawDanceFrame3, DrawDanceFrame4 };
-
-            for (int RepeatIndex = 0; RepeatIndex < 4; RepeatIndex++)
-            {
-                foreach (var Frame in Frames)
-                {
-                    Console.Clear();
-                    foreach (var StickFigureLine in Frame)
-                    {
-                        Console.WriteLine(StickFigureLine);
-                    }
-                    Thread.Sleep(220);
-                }
-            }
-
-
-        }
-        internal void WinDanceAnimation()
-        {
-            string[][] StickFigureDance = new string[2][];
-
-            StickFigureDance[0] = new string[] {
-            $@" \{CurrentPlayer.Sign}/ ",
-            @"  |  ",
-            @" / \ "};
-
-            StickFigureDance[1] = new string[] {
-            $@"  {CurrentPlayer.Sign}  ",
-            @" /|\ ",
-            @" / \ "};
-
-            for (int AnimationLoop = 0; AnimationLoop < 4; AnimationLoop++)
-            {
-                foreach (var DanceMove in StickFigureDance)
-                {
-                    Console.Clear();
-                    foreach (var Line in DanceMove)
-                    {
-                        Console.WriteLine(Line);
-                    }
-                    Thread.Sleep(180);
-                }
-            }
-            Console.Clear();
-        }
-        #endregion
     }
 }

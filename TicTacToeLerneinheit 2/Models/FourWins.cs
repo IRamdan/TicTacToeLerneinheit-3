@@ -4,11 +4,10 @@
     {
         internal FourWins()
         {
-            GameWinCondition = 4;
             GameFieldRows = 6;
             GameFieldCols = 7;
+            WinCondition = 4;
             GameField = new string[GameFieldRows, GameFieldCols];
-            WinCondition = GameWinCondition;
         }
         internal override void DrawBoard()
         {

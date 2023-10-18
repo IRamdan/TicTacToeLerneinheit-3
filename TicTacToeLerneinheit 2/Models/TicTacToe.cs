@@ -4,11 +4,10 @@
     {
         internal TicTacToe()
         {
-            GameWinCondition = 3;
             GameFieldRows = 3;
             GameFieldCols = 3;
+            WinCondition = 3;
             GameField = new string[GameFieldRows, GameFieldCols];
-            WinCondition = GameWinCondition;
         }
 
         internal override bool ProcessInput()

@@ -2,8 +2,9 @@
 {
     internal class Player
     {
-        internal string Name;
-        internal string Sign;
-        internal string Input;
+        internal int PlayerIdent { get; set; } 
+        internal string Name { get; set; }
+        internal string Sign { get; set; }
+        internal string Input { get; set; }
     }
 }
